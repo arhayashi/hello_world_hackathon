@@ -1,5 +1,23 @@
 import React, { useEffect, useRef, useState } from "react";
 
+function JoinCodeBanner() {
+    const [visible, setVisible] = useState(true);
+
+    if(!visible) return null;
+
+    return (
+        <div className = "fixed top-0 left-0 w-screen bg-blue-500 text-3xl font-bold flex items-center justify-between px-6 py-4 z-50">
+            <span> Join code: 12345 </span>
+            <button 
+                onClick={() => setVisible(false)}
+                className = "text-white text-2xl hover:text-gray-300 focus:outline-none"
+            >
+                &times;
+            </button>
+        </div>
+    )
+}
+
 /* ---------------- Messages List (square-ish bubbles, subtle shadow, hard wrap) ---------------- */
 function Messages({ items }) {
   const endRef = useRef(null);
@@ -82,6 +100,7 @@ export default function ChatPage() {
   return (
     <main className={`min-h-screen ${bgClass}`}>
       {/* Messages intentionally have NO extra bottom padding so they scroll under the fixed bar */}
+      <JoinCodeBanner/>
       <Messages items={messages} />
     </main>
   );
