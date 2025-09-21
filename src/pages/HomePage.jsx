@@ -1,7 +1,31 @@
-import React from "react";
-// If you're using React Router, swap <a> for <Link> and use `to="/..."`
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { createSession } from "../utils/supabase/supabase";
 
 export default function HomePage() {
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleStartSession = async () => {
+    setLoading(true);
+    
+    try {
+      const result = await createSession();
+      
+      if (result.success) {
+        // Navigate to the session page with the join code
+        navigate(`/session/${result.session.join_code}`);
+      } else {
+        alert('Failed to create session: ' + result.error);
+      }
+    } catch (error) {
+      console.error('Error creating session:', error);
+      alert('Failed to create session. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <main className="min-h-screen grid place-items-center px-4 bg-zinc-50">
       <div className="w-full max-w-sm sm:max-w-md text-center">
@@ -11,12 +35,13 @@ export default function HomePage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {/* Start Session (light) */}
-          <a
-            href="/session/12345"
-            className="inline-flex h-12 w-full items-center justify-center rounded-md border border-zinc-200 bg-white text-zinc-900 hover:bg-zinc-50 focus:outline-none focus:ring-4 focus:ring-zinc-200"
+          <button
+            onClick={handleStartSession}
+            disabled={loading}
+            className="inline-flex h-12 w-full items-center justify-center rounded-md border border-zinc-200 bg-white text-zinc-900 hover:bg-zinc-50 focus:outline-none focus:ring-4 focus:ring-zinc-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Start Session
-          </a>
+            {loading ? 'Creating...' : 'Start Session'}
+          </button>
 
           {/* Join Session (matte dark grey) */}
           <a

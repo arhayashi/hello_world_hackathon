@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import supabase, { getQuestionsByJoinCode, getSessionByJoinCode } from "../utils/supabase/supabase";
+import supabase, { submitQuestion, getQuestionsByJoinCode, getSessionByJoinCode } from "../utils/supabase/supabase";
 import { useParams } from "react-router-dom";
 
 /* ---------------- Messages List (square-ish bubbles, subtle shadow, hard wrap) ---------------- */

@@ -34,7 +34,7 @@ export async function getSessionByJoinCode(joinCode) {
 
 // TODO: replace with supabase rpc function that generates a unique 5-digit code and checks it there
 // (to avoid the repeated api calls)
-async function createSession() {
+export async function createSession() {
   const maxRetries = 10;
   
   for (let attempt = 0; attempt < maxRetries; attempt++) {
