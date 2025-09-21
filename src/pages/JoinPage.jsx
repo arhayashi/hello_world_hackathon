@@ -1,4 +1,6 @@
 import React, { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {getSessionByJoinCode} from "../utils/supabase/supabase"
 
 /* ---------- Reusable square button (matches your login style) ---------- */
 function SquareActionButton(props) {
@@ -42,7 +44,9 @@ export function FiveDigitCode({ length = 5, onComplete, label = "Enter 5 Digit C
     setValues(prev => {
       const next = [...prev];
       next[i] = v;
-      if (onComplete && next.every(d => d !== "")) onComplete(next.join(""));
+      if (onComplete && next.every(d => d.length > 0)) {
+        onComplete(next.join(""));
+      }
       return next;
     });
   };
@@ -66,7 +70,7 @@ export function FiveDigitCode({ length = 5, onComplete, label = "Enter 5 Digit C
       }
       const focusTo = Math.min(idx, length - 1);
       inputs[focusTo]?.current?.focus();
-      if (onComplete && next.every(d => d !== "")) onComplete(next.join(""));
+      if (onComplete && next.every(d => d.length > 0)) onComplete(next.join(""));
       return next;
     });
   };
@@ -130,10 +134,20 @@ export function FiveDigitCode({ length = 5, onComplete, label = "Enter 5 Digit C
 
 /* ---------- Centered page sample (drop-in) ---------- */
 export default function JoinPage() {
+  const navigate = useNavigate()
+  const validateSessionByJoinCode = async (code) => {
+    const res = await getSessionByJoinCode(code)
+    if (res.success) {
+      navigate(`/chat/${code}`)
+    } else {
+      console.log('Invalid session.')
+      console.log(`Error: ${res.error}`)
+    }
+  }
   return (
     <main className="min-h-screen grid place-items-center px-4">
       <div className="w-full max-w-sm sm:max-w-md">
-        <FiveDigitCode onComplete={(code) => console.log("Code:", code)} />
+        <FiveDigitCode onComplete={validateSessionByJoinCode} />
       </div>
     </main>
   );

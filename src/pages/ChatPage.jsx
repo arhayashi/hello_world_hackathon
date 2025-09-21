@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
+import supabase, { getQuestionsByJoinCode, getSessionByJoinCode } from "../utils/supabase/supabase";
+import { useParams } from "react-router-dom";
 
 /* ---------------- Messages List (square-ish bubbles, subtle shadow, hard wrap) ---------------- */
 function Messages({ items }) {
@@ -99,8 +101,10 @@ function ChatInputBar({ onSend, cooldownSec }) {
 /* ---------------- Top-level Chat Page (lighter bg, fixed bar overlays messages) ---------------- */
 export default function ChatPage() {
   const [messages, setMessages] = useState([]);
+  const [sessionId, setSessionId] = useState(null)
   const [cooldownUntil, setCooldownUntil] = useState(0);
   const [now, setNow] = useState(Date.now());
+  const { join_code } = useParams()
 
   // Much lighter background with a whisper of contrast
   const bgClass = "bg-white";
@@ -115,13 +119,36 @@ export default function ChatPage() {
   const cooldownSec = Math.ceil(remainingMs / 1000);
 
   // BaaS: load history + subscribe here if needed
+  // Fetch messages on page load
   useEffect(() => {
-    // myBaaS.fetchMessages().then(list => setMessages(list));
-    // const unsub = myBaaS.onMessage(msg => setMessages(prev => [...prev, msg]));
-    // return () => unsub?.();
-  }, []);
+    const loadMessages = async () => {
+      if (!join_code) {
+        return;
+      }
 
-  const handleSend = (text) => {
+      try {
+        // Get questions by join code (this should return {success, questions, sessionId})
+        const result = await getQuestionsByJoinCode(join_code);
+        
+        if (result.success) {
+          setMessages(result.questions || []);
+          setSessionId(result.sessionId);
+        }
+      } catch (err) {
+        console.error("Error loading messages:", err);
+        setError("Failed to load messages");
+      }
+    };
+
+    loadMessages();
+
+    const refreshInterval = setInterval(loadMessages, 5000);
+    
+    return () => clearInterval(refreshInterval);
+  }, [join_code]);
+
+
+  const handleSend = async (text) => {
     if (Date.now() < cooldownUntil) return; // rate limit (defense-in-depth)
 
     const newMsg = {
@@ -133,9 +160,16 @@ export default function ChatPage() {
 
     // Start 10s cooldown
     setCooldownUntil(Date.now() + 10_000);
-
-    // BaaS: persist the message (optimistic UI above)
-    // myBaaS.sendMessage(newMsg).catch(() => {/* optional rollback */});
+    try {
+        // Get session by join code
+        const result = await getSessionByJoinCode(join_code);
+        if (result.success) {
+          setSessionId(result.session.id);
+          await submitQuestion(result.session.id, text).catch(() => {/* optional rollback */});
+        }
+    } catch (error) {
+      console.error("Failed to submit question", error)
+    }
   };
 
   return (
