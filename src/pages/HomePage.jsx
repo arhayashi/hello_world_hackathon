@@ -12,7 +12,7 @@ export default function HomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {/* Start Session (light) */}
           <a
-            href="/start"
+            href="/chat"
             className="inline-flex h-12 w-full items-center justify-center rounded-md border border-zinc-200 bg-white text-zinc-900 hover:bg-zinc-50 focus:outline-none focus:ring-4 focus:ring-zinc-200"
           >
             Start Session
