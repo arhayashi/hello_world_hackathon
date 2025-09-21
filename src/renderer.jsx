@@ -21,7 +21,7 @@ const App = () => {
       })
     } else if (path === '/join'){
       window.electronAPI?.setWindowAttributes({
-        opacity: 1,
+        opacity: 0.5,
         title: 'Join a Session'
       })
     } else if (path === '/') {
@@ -34,7 +34,7 @@ const App = () => {
   return (
     <>
     <Routes>
-        <Route path = "/" element={<ChatPage/>} />
+        <Route path = "/" element={<HomePage/>} />
         <Route path = "/join" element={<JoinPage/>}/>
         <Route path = "/chat" element={<ChatPage/>}/>
       </Routes>

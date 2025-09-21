@@ -18,10 +18,7 @@ const createWindow = () => {
     frame: false,
     titleBarOverlay: true,
     backgroundColor: "rgba(255, 255, 255, 1.0)",
-<<<<<<< HEAD
     opacity: 0.8,
-=======
->>>>>>> 8e5cf75 (added reactive styling)
     titleBarStyle: "customButtonsOnHover",
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -38,6 +35,8 @@ const createWindow = () => {
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
 };
+
+  // Open the DevTools.
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
