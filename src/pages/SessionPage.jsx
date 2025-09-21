@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
+import { getQuestionsByJoinCode } from "../utils/supabase/supabase";
 
 function JoinCodeBanner() {
     const [visible, setVisible] = useState(true);
@@ -58,44 +60,38 @@ function Messages({ items }) {
 /* ---------------- Top-level Chat Page (lighter bg, fixed bar overlays messages) ---------------- */
 export default function ChatPage() {
   const [messages, setMessages] = useState([]);
-  const [cooldownUntil, setCooldownUntil] = useState(0);
-  const [now, setNow] = useState(Date.now());
+  const [sessionId, setSessionId] = useState(null)
+  const { join_code } = useParams()
 
   // Much lighter background with a whisper of contrast
   const bgClass = "bg-white";
 
-  // Tick a small clock so the countdown updates
+  // load messages
   useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), 300);
-    return () => clearInterval(id);
-  }, []);
-
-  const remainingMs = Math.max(0, cooldownUntil - now);
-  const cooldownSec = Math.ceil(remainingMs / 1000);
-
-  // BaaS: load history + subscribe here if needed
-  useEffect(() => {
-    // myBaaS.fetchMessages().then(list => setMessages(list));
-    // const unsub = myBaaS.onMessage(msg => setMessages(prev => [...prev, msg]));
-    // return () => unsub?.();
-  }, []);
-
-  const handleSend = (text) => {
-    if (Date.now() < cooldownUntil) return; // rate limit (defense-in-depth)
-
-    const newMsg = {
-      id: crypto.randomUUID?.() || String(Date.now()),
-      text,
-      ts: Date.now(),
-    };
-    setMessages((prev) => [...prev, newMsg]);
-
-    // Start 10s cooldown
-    setCooldownUntil(Date.now() + 10_000);
-
-    // BaaS: persist the message (optimistic UI above)
-    // myBaaS.sendMessage(newMsg).catch(() => {/* optional rollback */});
-  };
+      const loadMessages = async () => {
+        if (!join_code) {
+          return;
+        }
+  
+        try {
+          // Get questions by join code (this should return {success, questions, sessionId})
+          const result = await getQuestionsByJoinCode(join_code);
+          
+          if (result.success) {
+            setMessages(result.questions || []);
+            setSessionId(result.sessionId);
+          }
+        } catch (err) {
+          console.error("Error loading messages:", err);
+        }
+      };
+  
+      loadMessages();
+  
+      const refreshInterval = setInterval(loadMessages, 5000);
+      
+      return () => clearInterval(refreshInterval);
+    }, [join_code]);
 
   return (
     <main className={`min-h-screen ${bgClass}`}>
