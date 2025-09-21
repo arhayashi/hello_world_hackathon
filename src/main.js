@@ -13,6 +13,13 @@ const createWindow = () => {
     width: 800,
     height: 600,
     alwaysOnTop: true,
+    width: 500,
+    height: 1000,
+    frame: false,
+    titleBarOverlay: true,
+    backgroundColor: "rgba(255, 255, 255, 1.0)",
+    opacity: 0.5,
+    titleBarStyle: "customButtonsOnHover",
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
