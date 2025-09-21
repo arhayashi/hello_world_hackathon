@@ -15,9 +15,9 @@ const App = () => {
   useEffect(() => {
     const path = location.pathname
     console.log(path)
-    if (path === '/session') {
+    if (path.startsWith('/session/')) {
       window.electronAPI.setWindowAttributes({ opacity: 0.5 })
-      console.log(path === '/chat')
+      console.log(path.startsWith('/chat'))
     } else {
       window.electronAPI.setWindowAttributes({ opacity: 1 })
     }
@@ -28,7 +28,7 @@ const App = () => {
         <Route path = "/" element={<HomePage/>} />
         <Route path = "/join" element={<JoinPage/>}/>
         <Route path = "/chat/:join_code" element={<ChatPage/>}/>
-        <Route path = "/session" element={<SessionPage/>}/>
+        <Route path = "/session/:join_code" element={<SessionPage/>}/>
       </Routes>
     </>
       
