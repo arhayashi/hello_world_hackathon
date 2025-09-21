@@ -13,22 +13,12 @@ const App = () => {
 
   useEffect(() => {
     const path = location.pathname
-
+    console.log(path)
     if (path === '/chat') {
-      window.electronAPI?.setWindowAttributes({
-        opacity: 0.5,
-        title: 'Have a Question?',
-      })
-    } else if (path === '/join'){
-      window.electronAPI?.setWindowAttributes({
-        opacity: 0.5,
-        title: 'Join a Session'
-      })
-    } else if (path === '/') {
-      window.electronAPI?.setWindowAttributes({
-        opacity: 1,
-        title: 'Home'
-      })
+      window.electronAPI.setWindowAttributes({ opacity: 0.5 })
+      console.log(path === '/chat')
+    } else {
+      window.electronAPI.setWindowAttributes({ opacity: 1 })
     }
   }, [location])
   return (

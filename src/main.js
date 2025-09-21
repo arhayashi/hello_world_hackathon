@@ -7,18 +7,21 @@ if (started) {
   app.quit();
 }
 
+let mainWindow
+
 const createWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    transparent: true,
     alwaysOnTop: true,
     width: 500,
     height: 500,
     frame: false,
     titleBarOverlay: true,
     backgroundColor: "rgba(255, 255, 255, 1.0)",
-    opacity: 0.8,
+    opacity: 1,
     titleBarStyle: "customButtonsOnHover",
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -36,8 +39,21 @@ const createWindow = () => {
   mainWindow.webContents.openDevTools();
 };
 
-  // Open the DevTools.
-
+ipcMain.handle('window:set-attributes', (_event, options) => {
+  
+  if (!mainWindow) {
+    console.log("[main.js] No mainWindow exists!")
+    return
+  }
+  
+  if (typeof options.opacity === 'number') {
+    const clamped = Math.min(1, Math.max(0, options.opacity))
+    console.log("inside if statement, setting opacity to, ", clamped)
+    mainWindow.setOpacity(clamped)
+  } else {
+    console.log('invalid opacity')
+  }
+})
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
