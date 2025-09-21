@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
 
@@ -14,11 +14,14 @@ const createWindow = () => {
     height: 600,
     alwaysOnTop: true,
     width: 500,
-    height: 1000,
+    height: 500,
     frame: false,
     titleBarOverlay: true,
     backgroundColor: "rgba(255, 255, 255, 1.0)",
+<<<<<<< HEAD
     opacity: 0.8,
+=======
+>>>>>>> 8e5cf75 (added reactive styling)
     titleBarStyle: "customButtonsOnHover",
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
