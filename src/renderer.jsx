@@ -11,11 +11,10 @@ const App = () => {
   return (
     <>
     <Routes>
-        <Route path = "/" element={<HomePage/>} />
+        <Route path = "/" element={<ChatPage/>} />
         <Route path = "/join" element={<JoinPage/>}/>
         <Route path = "/chat" element={<ChatPage/>}/>
       </Routes>
-      <p>Hello!</p>
     </>
       
   )
@@ -28,6 +27,5 @@ root.render(
     <BrowserRouter>
       <App/>
     </BrowserRouter>
-    
   </StrictMode>
 );

@@ -18,7 +18,7 @@ const createWindow = () => {
     frame: false,
     titleBarOverlay: true,
     backgroundColor: "rgba(255, 255, 255, 1.0)",
-    opacity: 0.5,
+    opacity: 0.8,
     titleBarStyle: "customButtonsOnHover",
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
