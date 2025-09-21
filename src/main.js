@@ -12,6 +12,7 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    alwaysOnTop: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
@@ -41,7 +42,11 @@ app.whenReady().then(() => {
       createWindow();
     }
   });
+  
+  
 });
+
+
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits

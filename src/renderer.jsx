@@ -1,9 +1,23 @@
 import { createRoot } from "react-dom/client";
 import { StrictMode } from "react";
+import { BrowserRouter } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
+import HomePage from "./pages/HomePage"
+import JoinPage from "./pages/JoinPage"
+import ChatPage from "./pages/ChatPage"
+
 
 const App = () => {
   return (
-    <p className="text-2xl text-red-200">test</p>
+    <>
+    <Routes>
+        <Route path = "/" element={<HomePage/>} />
+        <Route path = "/join" element={<JoinPage/>}/>
+        <Route path = "/chat" element={<ChatPage/>}/>
+      </Routes>
+      <p>Hello!</p>
+    </>
+      
   )
 }
 
@@ -11,6 +25,9 @@ const container = document.getElementById("root");
 const root = createRoot(container);
 root.render(
   <StrictMode>
-    <App/>
+    <BrowserRouter>
+      <App/>
+    </BrowserRouter>
+    
   </StrictMode>
 );
