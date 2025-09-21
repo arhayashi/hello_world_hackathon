@@ -6,6 +6,7 @@ import { useLocation } from 'react-router-dom'
 import HomePage from "./pages/HomePage"
 import JoinPage from "./pages/JoinPage"
 import ChatPage from "./pages/ChatPage"
+import SessionPage from "./pages/SessionPage"
 
 
 const App = () => {
@@ -14,7 +15,7 @@ const App = () => {
   useEffect(() => {
     const path = location.pathname
     console.log(path)
-    if (path === '/chat') {
+    if (path === '/session') {
       window.electronAPI.setWindowAttributes({ opacity: 0.5 })
       console.log(path === '/chat')
     } else {
@@ -27,6 +28,7 @@ const App = () => {
         <Route path = "/" element={<HomePage/>} />
         <Route path = "/join" element={<JoinPage/>}/>
         <Route path = "/chat" element={<ChatPage/>}/>
+        <Route path = "/session" element={<SessionPage/>}/>
       </Routes>
     </>
       

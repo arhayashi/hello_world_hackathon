@@ -7,4 +7,9 @@ body {
   margin: auto;
   max-width: 38rem;
   padding: 2rem;
+  -webkit-app-region: drag;
+}
+
+button, a , input, textarea {
+  -webkit-app-region: no-drag;
 }
